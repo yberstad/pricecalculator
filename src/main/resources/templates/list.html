@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="default">
+<head>
+    <title>Price List</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <div class="table-responsive">
+        <div>
+            <table class="table table--striped">
+                <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Units</th>
+                    <th>Price</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="prod: ${products}">
+                    <td th:text="${prod.productName}">Product name</td>
+                    <td th:text="${prod.numberOfUnits}">10</td>
+                    <td th:text="${prod.total}">250.00</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</body>
+</html>
