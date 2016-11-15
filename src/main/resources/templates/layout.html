@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="site-head">
+    <meta charset="UTF-8"/>
+    <meta th:include="this :: head" th:remove="tag"/>
+</head>
+<body>
+<header th:fragment="site-header">
+</header>
+<h1>Price Calculator</h1>
+<footer th:fragment="site-footer">
+    &copy; Driw Demo 2016
+</footer>
+</body>
+</html>
