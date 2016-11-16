@@ -9,10 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Controller
 @RequestMapping(value = "/")
@@ -21,17 +18,17 @@ class ProductController {
     private ProductService productService;
 
     @Autowired
-    ProductController(ProductService productService){
+    ProductController(ProductService productService) {
         this.productService = productService;
     }
 
     @RequestMapping(value = "/list", method = RequestMethod.GET)
-    ModelAndView getPriceList(){
+    ModelAndView getPriceList() {
         ModelAndView modelAndView = new ModelAndView("list");
         List<Product> productList = productService.findAll();
         List<ProductViewModel> productModelList = new ArrayList<>();
-        for (Product product : productList ) {
-            for (int i = 1; i<= 50; i++){
+        for (Product product : productList) {
+            for (int i = 1; i <= 50; i++) {
                 productModelList.add(new ProductViewModel(product.getName(), i, product.getTotalPrice(i)));
             }
         }
@@ -39,19 +36,36 @@ class ProductController {
     }
 
     @RequestMapping(value = "/calculator", method = RequestMethod.GET)
-    ModelAndView getForm(InputForm inputForm){
+    ModelAndView getForm(InputForm inputForm) {
         ModelAndView modelAndView = new ModelAndView("calculator");
         List<Product> productList = productService.findAll();
         Set<Option> optionList = new HashSet<>();
-        for(Product product : productList) {
+        for (Product product : productList) {
             optionList.add(new Option(product.getId(), product.getName()));
         }
+
         return modelAndView.addObject("options", optionList);
     }
 
     @RequestMapping(value = "/calculator", method = RequestMethod.POST)
-    String postForm(InputForm inputForm){
-        return "calculator";
+    ModelAndView postForm(InputForm inputForm) {
+        ModelAndView modelAndView = new ModelAndView("calculator");
+        List<Product> productList = productService.findAll();
+        Optional<Product> selectedProduct = productList
+                .stream()
+                .filter(product -> (product.getId() == inputForm.getProductId()))
+                .findFirst();
+
+        if (selectedProduct.isPresent()) {
+            Product product = selectedProduct.get();
+            Double total = product.getTotalPrice(inputForm.numberOfUnits, inputForm.numberOfPackages);
+            int totalUnits = inputForm.numberOfUnits + (inputForm.getNumberOfPackages() * product.getUnitsPrPackage());
+            modelAndView.addObject("selectedProduct", product.getName());
+            modelAndView.addObject("selectedTotalUnits", totalUnits);
+            modelAndView.addObject("selectedTotal", total);
+        }
+
+        return modelAndView;
     }
 
     public static final class InputForm {
@@ -62,6 +76,7 @@ class ProductController {
         public long getProductId() {
             return productId;
         }
+
         public void setProductId(long productId) {
             this.productId = productId;
         }
@@ -87,7 +102,7 @@ class ProductController {
         private long value;
         private String text;
 
-        public Option(long value, String text){
+        public Option(long value, String text) {
             this.value = value;
             this.text = text;
         }

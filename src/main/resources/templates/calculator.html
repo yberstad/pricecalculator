@@ -8,25 +8,52 @@
 </head>
 <body>
 <div layout:fragment="content">
-    <form th:method="POST" th:action="${action}" th:object="${inputForm}">
-        <div class="form-group">
-            <select class="form-control" th:field="*{productId}"  id="dropOperator">
-                <option value="0" th:text="|Select product|" ></option>
-                <option th:each="option : ${options}"
-                        th:value="${option.value}"
-                        th:text="${option.text}"></option>
-            </select>
+    <div class="row">
+        <div class="col-md-3"></div>
+        <div class="col-md-6">
+            <h1>Price Calculator</h1>
+            <form th:method="POST" th:action="${action}" th:object="${inputForm}">
+                <div class="form-group">
+                    <select class="form-control" th:field="*{productId}" id="dropOperator">
+                        <option value="0" th:text="|Select product|"></option>
+                        <option th:each="option : ${options}"
+                                th:value="${option.value}"
+                                th:text="${option.text}"></option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="numberOfPackages">Number of packages</label>
+                    <input type="input" class="form-control" id="numberOfPackages" name="numberOfPackages"
+                           placeholder="Packages"/>
+                </div>
+                <div class="form-group">
+                    <label for="numberOfUnits">Number of units</label>
+                    <input type="input" class="form-control" id="numberOfUnits" name="numberOfUnits"
+                           placeholder="Units"/>
+                </div>
+                <button type="submit" class="btn btn-default">Calculate</button>
+            </form>
+            <div th:if="${selectedProduct != null}">
+                <table class="table table--striped">
+                    <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Units</th>
+                        <th>Price</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td th:text="${selectedProduct}">Product name</td>
+                        <td th:text="${selectedTotalUnits}">10</td>
+                        <td th:text="${selectedTotal}">250.00</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
-        <div class="form-group">
-            <label for="numberOfPackages">Number of packages</label>
-            <input type="input" class="form-control" id="numberOfPackages" name="numberOfPackages" placeholder="Packages" />
-        </div>
-        <div class="form-group">
-            <label for="numberOfUnits">Number of units</label>
-            <input type="input" class="form-control" id="numberOfUnits" name="numberOfUnits" placeholder="Units" />
-        </div>
-        <button type="submit" class="btn btn-default">Calculate</button>
-    </form>
+        <div class="col-md-3"></div>
+    </div>
 </div>
 </body>
 </html>

@@ -9,6 +9,8 @@ import org.thymeleaf.templateresolver.FileTemplateResolver;
 import org.thymeleaf.templateresolver.ITemplateResolver;
 import org.thymeleaf.templateresolver.TemplateResolver;
 
+// Used to fix problem with that Thymeleaf cached templates.
+// https://github.com/spring-projects/spring-boot/issues/34
 @Configuration
 public class ThymeleafConfiguration {
     @Autowired

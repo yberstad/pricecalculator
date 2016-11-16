@@ -48,11 +48,17 @@ public class Product extends BaseEntity implements Serializable {
         this.unitIncreasePercentage = unitIncreasePercentage;
     }
 
-    public String getName() {
-        return name;
+    public Double getTotalPrice(int numberOfUnits, int numberOfPackages){
+        numberOfUnits += numberOfPackages * this.unitsPrPackage;
+        return this.calculatePrice(numberOfUnits);
     }
 
     public Double getTotalPrice(int numberOfUnits){
+        return this.calculatePrice(numberOfUnits);
+    }
+
+    private Double calculatePrice(int numberOfUnits) {
+
         Assert.isTrue(numberOfUnits >= 0);
         int numberOfPackages = numberOfUnits / this.unitsPrPackage;
         int reminderOfUnits = numberOfUnits % this.unitsPrPackage;
@@ -86,6 +92,12 @@ public class Product extends BaseEntity implements Serializable {
     private Double roundUp(Double value, int scale) {
         return new BigDecimal(value).setScale(scale, RoundingMode.HALF_UP).doubleValue();
     }
+
+    public String getName() {
+        return name;
+    }
+
+    public int getUnitsPrPackage() { return unitsPrPackage; }
 
     public Long getId() {
         return id;
