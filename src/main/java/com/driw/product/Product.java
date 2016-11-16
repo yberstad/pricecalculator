@@ -59,7 +59,7 @@ public class Product extends BaseEntity implements Serializable {
 
     private Double calculatePrice(int numberOfUnits) {
 
-        Assert.isTrue(numberOfUnits >= 0);
+        Assert.isTrue(numberOfUnits >= 0, "Cannot use negative numbers");
         int numberOfPackages = numberOfUnits / this.unitsPrPackage;
         int reminderOfUnits = numberOfUnits % this.unitsPrPackage;
 
@@ -82,11 +82,11 @@ public class Product extends BaseEntity implements Serializable {
     }
 
     private Double getDiscountFactor(int percentage) {
-        return ((100 - percentage) / 100.0);
+        return roundUp((100 - percentage) / 100.0, 2);
     }
 
     private Double getIncreaseFactor(int percentage) {
-        return 1 + (percentage / 100.0);
+        return roundUp(1 + (percentage / 100.0), 2);
     }
 
     private Double roundUp(Double value, int scale) {
