@@ -1,10 +1,10 @@
-package com.driw.web.product;
+package com.driw.controller.product;
 
-import com.driw.product.Product;
-import com.driw.product.ProductService;
-import com.driw.web.product.viewmodels.CalculatorViewModel;
-import com.driw.web.product.viewmodels.InputFormViewModel;
-import com.driw.web.product.viewmodels.ProductViewModel;
+import com.driw.controller.product.viewmodels.CalculatorViewModel;
+import com.driw.controller.product.viewmodels.InputFormViewModel;
+import com.driw.controller.product.viewmodels.ProductViewModel;
+import com.driw.component.product.Product;
+import com.driw.component.product.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -36,9 +36,9 @@ class ProductController {
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     ModelAndView getPriceList() {
         ModelAndView modelAndView = new ModelAndView("list");
-        List<com.driw.product.Product> productList = productService.findAll();
+        List<Product> productList = productService.findAll();
         List<ProductViewModel> productModelList = new ArrayList<>();
-        for (com.driw.product.Product product : productList) {
+        for (Product product : productList) {
             for (int i = 1; i <= 50; i++) {
                 productModelList.add(new ProductViewModel(product.getName(), i, product.getTotalPrice(i)));
             }

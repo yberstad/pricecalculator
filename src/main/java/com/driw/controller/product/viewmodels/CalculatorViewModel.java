@@ -1,6 +1,6 @@
-package com.driw.web.product.viewmodels;
+package com.driw.controller.product.viewmodels;
 
-import com.driw.product.Product;
+import com.driw.component.product.Product;
 
 import java.util.List;
 import java.util.Set;

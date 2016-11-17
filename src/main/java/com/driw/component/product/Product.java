@@ -1,4 +1,4 @@
-package com.driw.product;
+package com.driw.component.product;
 
 import com.driw.base.BaseEntity;
 import org.springframework.util.Assert;

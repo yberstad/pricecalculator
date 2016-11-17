@@ -1,4 +1,4 @@
-package com.driw.web.product.viewmodels;
+package com.driw.controller.product.viewmodels;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;

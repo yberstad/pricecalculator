@@ -1,4 +1,4 @@
-package com.driw.product;
+package com.driw.component.product;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

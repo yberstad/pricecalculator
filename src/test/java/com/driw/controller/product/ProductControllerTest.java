@@ -1,7 +1,7 @@
-package com.driw.web.product;
+package com.driw.controller.product;
 
-import com.driw.product.Product;
-import com.driw.product.ProductService;
+import com.driw.component.product.Product;
+import com.driw.component.product.ProductService;
 import com.driw.utils.SetIdHelper;
 import org.junit.Test;
 import org.junit.runner.RunWith;

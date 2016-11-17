@@ -1,4 +1,4 @@
-package com.driw.web.product.viewmodels;
+package com.driw.controller.product.viewmodels;
 
 public class ProductViewModel {
     private String productName;

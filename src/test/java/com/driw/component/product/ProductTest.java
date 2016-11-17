@@ -1,4 +1,4 @@
-package com.driw.product;
+package com.driw.component.product;
 
 import com.driw.utils.SetIdHelper;
 import org.junit.Before;
