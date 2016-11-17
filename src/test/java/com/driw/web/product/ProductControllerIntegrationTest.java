@@ -83,7 +83,7 @@ public class ProductControllerIntegrationTest {
                 .accept(MediaType.TEXT_HTML))
                 .andExpect(status().isOk())
                 .andExpect(content().string(containsString("has-error")))
-                .andExpect(content().string(containsString("Must be a number and above zero")));
+                .andExpect(content().string(containsString("Must be a number and between 0 and 100")));
     }
 
     @Test
@@ -97,7 +97,7 @@ public class ProductControllerIntegrationTest {
                 .accept(MediaType.TEXT_HTML))
                 .andExpect(status().isOk())
                 .andExpect(content().string(containsString("has-error")))
-                .andExpect(content().string(containsString("Must be a number and above zero")));
+                .andExpect(content().string(containsString("Must be a number and between 0 and 100")));
     }
 
     @Test

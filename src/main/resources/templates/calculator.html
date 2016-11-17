@@ -23,13 +23,13 @@
                 <label class="control-label" for="numberOfPackages">Number of packages</label>
                 <input type="input" class="form-control" id="numberOfPackages" name="numberOfPackages"
                        placeholder="Packages" th:value="*{numberOfPackages}"/>
-                <span th:if="${#fields.hasErrors('numberOfPackages')}" class="help-block" >Must be a number and above zero</span>
+                <span th:if="${#fields.hasErrors('numberOfPackages')}" class="help-block" >Must be a number and between 0 and 100</span>
         </div>
         <div class="form-group" th:classappend="${#fields.hasErrors('numberOfUnits')} ? has-error">
             <label class="control-label" for="numberOfUnits">Number of units</label>
             <input type="input" class="form-control" id="numberOfUnits" name="numberOfUnits"
                    placeholder="Units" th:value="*{numberOfUnits}"/>
-            <span th:if="${#fields.hasErrors('numberOfUnits')}" class="help-block" >Must be a number and above zero</span>
+            <span th:if="${#fields.hasErrors('numberOfUnits')}" class="help-block" >Must be a number and between 0 and 100</span>
         </div>
         <button type="submit" class="btn btn-default">Calculate</button>
     </form>
