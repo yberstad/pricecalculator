@@ -1,6 +1,6 @@
-package com.driw.web.product;
+package com.driw.web.product.viewmodels;
 
-class ProductViewModel {
+public class ProductViewModel {
     private String productName;
     private int numberOfUnits;
     private Double total;

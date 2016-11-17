@@ -2,6 +2,9 @@ package com.driw.web.product;
 
 import com.driw.product.Product;
 import com.driw.product.ProductService;
+import com.driw.web.product.viewmodels.CalculatorViewModel;
+import com.driw.web.product.viewmodels.InputFormViewModel;
+import com.driw.web.product.viewmodels.ProductViewModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,9 +27,9 @@ class ProductController {
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     ModelAndView getPriceList() {
         ModelAndView modelAndView = new ModelAndView("list");
-        List<Product> productList = productService.findAll();
+        List<com.driw.product.Product> productList = productService.findAll();
         List<ProductViewModel> productModelList = new ArrayList<>();
-        for (Product product : productList) {
+        for (com.driw.product.Product product : productList) {
             for (int i = 1; i <= 50; i++) {
                 productModelList.add(new ProductViewModel(product.getName(), i, product.getTotalPrice(i)));
             }
@@ -35,21 +38,23 @@ class ProductController {
     }
 
     @RequestMapping(value = "/calculator", method = RequestMethod.GET)
-    ModelAndView getForm(InputForm inputForm) {
-        ModelAndView modelAndView = new ModelAndView("calculator");
+    ModelAndView getForm(InputFormViewModel inputForm) {
         List<Product> productList = productService.findAll();
-        Set<Option> optionList = new HashSet<>();
-        for (Product product : productList) {
-            optionList.add(new Option(product.getId(), product.getName()));
-        }
 
-        return modelAndView.addObject("options", optionList);
+        CalculatorViewModel viewModel = new CalculatorViewModel(productList);
+        ModelAndView modelAndView = new ModelAndView("calculator");
+
+        return modelAndView.addObject("viewModel", viewModel);
     }
 
     @RequestMapping(value = "/calculator", method = RequestMethod.POST)
-    ModelAndView postForm(InputForm inputForm) {
-        ModelAndView modelAndView = new ModelAndView("calculator");
+    ModelAndView postForm(InputFormViewModel inputForm) {
+
         List<Product> productList = productService.findAll();
+
+        CalculatorViewModel viewModel = new CalculatorViewModel(productList);
+        ModelAndView modelAndView = new ModelAndView("calculator");
+
         Optional<Product> selectedProduct = productList
                 .stream()
                 .filter(product -> (product.getId() == inputForm.getProductId()))
@@ -57,69 +62,15 @@ class ProductController {
 
         if (selectedProduct.isPresent()) {
             Product product = selectedProduct.get();
-            Double total = product.getTotalPrice(inputForm.numberOfUnits, inputForm.numberOfPackages);
-            int totalUnits = inputForm.numberOfUnits + (inputForm.getNumberOfPackages() * product.getUnitsPrPackage());
-            modelAndView.addObject("selectedProduct", product.getName());
-            modelAndView.addObject("selectedTotalUnits", totalUnits);
-            modelAndView.addObject("selectedTotal", total);
+            Double total = product.getTotalPrice(inputForm.getNumberOfUnits(), inputForm.getNumberOfPackages());
+            int totalUnits = inputForm.getNumberOfUnits() + (inputForm.getNumberOfPackages() * product.getUnitsPrPackage());
+
+            viewModel.setDisplaySelectedProduct(true);
+            viewModel.setSelectedProductName(product.getName());
+            viewModel.setSelectedTotalUnits(totalUnits);
+            viewModel.setTotal(total);
         }
 
-        return modelAndView;
-    }
-
-    public static final class InputForm {
-        private long productId;
-        private int numberOfPackages;
-        private int numberOfUnits;
-
-        public long getProductId() {
-            return productId;
-        }
-
-        public void setProductId(long productId) {
-            this.productId = productId;
-        }
-
-        public int getNumberOfPackages() {
-            return numberOfPackages;
-        }
-
-        public void setNumberOfPackages(int numberOfPackages) {
-            this.numberOfPackages = numberOfPackages;
-        }
-
-        public int getNumberOfUnits() {
-            return numberOfUnits;
-        }
-
-        public void setNumberOfUnits(int numberOfUnits) {
-            this.numberOfUnits = numberOfUnits;
-        }
-    }
-
-    public static final class Option {
-        private long value;
-        private String text;
-
-        public Option(long value, String text) {
-            this.value = value;
-            this.text = text;
-        }
-
-        public long getValue() {
-            return value;
-        }
-
-        public String getText() {
-            return text;
-        }
-
-        public void setValue(long value) {
-            this.value = value;
-        }
-
-        public void setText(String text) {
-            this.text = text;
-        }
+        return modelAndView.addObject("viewModel", viewModel);
     }
 }

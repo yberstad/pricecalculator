@@ -115,6 +115,15 @@ public class ProductTest {
     }
 
     @Test
+    public void getTotalPrice_ZeroNumberOfUnits_PriceShouldZero() throws Exception {
+        Product product = getStubProduct1();
+        assertThat(product.getTotalPrice(0))
+                .isEqualTo(0);
+        assertThat(product.getTotalPrice(0,0))
+                .isEqualTo(0);
+    }
+
+    @Test
     public void getTotalPrice_NegativeNumberOfUnits_ShouldThorwException() throws Exception {
         Product product = getStubProduct1();
         thrown.expect(IllegalArgumentException.class);

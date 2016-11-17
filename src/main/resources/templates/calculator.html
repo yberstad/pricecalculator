@@ -12,11 +12,11 @@
         <div class="col-md-3"></div>
         <div class="col-md-6">
             <h1>Price Calculator</h1>
-            <form th:method="POST" th:action="${action}" th:object="${inputForm}">
+            <form th:method="POST" th:action="${action}" th:object="${inputFormViewModel}">
                 <div class="form-group">
                     <select class="form-control" th:field="*{productId}" id="dropOperator">
                         <option value="0" th:text="|Select product|"></option>
-                        <option th:each="option : ${options}"
+                        <option th:each="option : ${viewModel.optionList}"
                                 th:value="${option.value}"
                                 th:text="${option.text}"></option>
                     </select>
@@ -24,16 +24,16 @@
                 <div class="form-group">
                     <label for="numberOfPackages">Number of packages</label>
                     <input type="input" class="form-control" id="numberOfPackages" name="numberOfPackages"
-                           placeholder="Packages"/>
+                           placeholder="Packages" th:value="*{numberOfPackages}"/>
                 </div>
                 <div class="form-group">
                     <label for="numberOfUnits">Number of units</label>
                     <input type="input" class="form-control" id="numberOfUnits" name="numberOfUnits"
-                           placeholder="Units"/>
+                           placeholder="Units" th:value="*{numberOfUnits}"/>
                 </div>
                 <button type="submit" class="btn btn-default">Calculate</button>
             </form>
-            <div th:if="${selectedProduct != null}">
+            <div th:if="${viewModel.displaySelectedProduct != null}">
                 <table class="table table--striped">
                     <thead>
                     <tr>
@@ -44,9 +44,9 @@
                     </thead>
                     <tbody>
                     <tr>
-                        <td th:text="${selectedProduct}">Product name</td>
-                        <td th:text="${selectedTotalUnits}">10</td>
-                        <td th:text="${selectedTotal}">250.00</td>
+                        <td th:text="${viewModel.selectedProductName}">Product name</td>
+                        <td th:text="${viewModel.selectedTotalUnits}">10</td>
+                        <td th:text="${viewModel.total}">250.00</td>
                     </tr>
                     </tbody>
                 </table>
