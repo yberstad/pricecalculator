@@ -8,6 +8,9 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
+/**
+ * Domain oriented module, containing both data and business logic for a Product.
+ */
 @Entity
 public class Product extends BaseEntity implements Serializable {
 
@@ -48,14 +51,48 @@ public class Product extends BaseEntity implements Serializable {
         this.unitIncreasePercentage = unitIncreasePercentage;
     }
 
+    /**
+     * Calculates the best price by optimizing the number of packages and units.
+     * @param numberOfUnits Number of units
+     * @param numberOfPackages Number of packages
+     * @return The total price.
+     */
     public Double getTotalPrice(int numberOfUnits, int numberOfPackages){
         numberOfUnits += numberOfPackages * this.unitsPrPackage;
         return this.calculatePrice(numberOfUnits);
     }
 
+    /**
+     * Calculates the best price by optimizing the number of packages and units.
+     * @param numberOfUnits Number of units
+     * @return The total price.
+     */
     public Double getTotalPrice(int numberOfUnits){
         return this.calculatePrice(numberOfUnits);
     }
+
+    /**
+     *
+     * @return Returns the name of the product.
+     */
+    public String getName() {
+        return name;
+    }
+
+    /**
+     *
+     * @return Returns the number of units within a package.
+     */
+    public int getUnitsPrPackage() { return unitsPrPackage; }
+
+    /**
+     *
+     * @return Retuns the id (primary key) for product.
+     */
+    public Long getId() {
+        return id;
+    }
+
 
     private Double calculatePrice(int numberOfUnits) {
 
@@ -91,16 +128,6 @@ public class Product extends BaseEntity implements Serializable {
 
     private Double roundUp(Double value, int scale) {
         return new BigDecimal(value).setScale(scale, RoundingMode.HALF_UP).doubleValue();
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public int getUnitsPrPackage() { return unitsPrPackage; }
-
-    public Long getId() {
-        return id;
     }
 
     @Override

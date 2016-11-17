@@ -17,7 +17,6 @@ import java.util.List;
 import static org.hamcrest.Matchers.containsString;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -51,7 +50,6 @@ public class ProductControllerTest {
     public void getPriceList() throws Exception {
         when(productService.findAll()).thenReturn(this.getStubProductList());
         this.mockMvc.perform(get("/list"))
-                .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(containsString("Product1")));
 
@@ -62,7 +60,6 @@ public class ProductControllerTest {
     public void getForm() throws Exception {
         when(productService.findAll()).thenReturn(this.getStubProductList());
         this.mockMvc.perform(get("/calculator"))
-                .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(containsString("Product2")));
 

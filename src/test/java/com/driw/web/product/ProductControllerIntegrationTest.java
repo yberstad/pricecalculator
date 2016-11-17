@@ -59,7 +59,6 @@ public class ProductControllerIntegrationTest {
     @Test
     public void getPriceList() throws Exception {
         this.mockMvc.perform(get("/list"))
-                .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(containsString("Pingvinører")));
     }
@@ -67,7 +66,6 @@ public class ProductControllerIntegrationTest {
     @Test
     public void getForm() throws Exception {
         this.mockMvc.perform(get("/calculator"))
-                .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(containsString("Price Calculator")));
     }
