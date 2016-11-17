@@ -45,28 +45,28 @@ public class ProductTest {
 
     @Test
     public void getTotalPrice_CountMatchesNumberOfUnitsPrPackage_PriceShouldMatchPackagePrice() throws Exception {
-        Product product = getStubProduct1();
+        Product product = getStubProduct();
         assertThat(product.getTotalPrice(UNITS_PR_PACKAGE))
                 .isEqualTo(PACKAGE_PRICE);
     }
 
     @Test
     public void getTotalPrice_CountMatchWholePackagesButLessThanDiscountThreshold_PriceShouldMatchPackagePriceMultipiedWithCount() throws Exception {
-        Product product = getStubProduct1();
+        Product product = getStubProduct();
         assertThat(product.getTotalPrice(UNITS_PR_PACKAGE * 2))
                 .isEqualTo(PACKAGE_PRICE * 2);
     }
 
     @Test
     public void getTotalPrice_CountMatchWholePackagesAndIsEqualToDiscountThreshold_PriceShouldBeDiscounted() throws Exception {
-        Product product = getStubProduct1();
+        Product product = getStubProduct();
         assertThat(product.getTotalPrice(UNITS_PR_PACKAGE * PACKAGE_DISCOUNT_THRESHOLD_VALUE))
                 .isLessThan(PACKAGE_PRICE * PACKAGE_DISCOUNT_THRESHOLD_VALUE);
     }
 
     @Test
     public void getTotalPrice_CountMatchWholePackagesAndIsEqualToDiscountThreshold_PriceShouldBeDiscountedWithCorrectFactor() throws Exception {
-        Product product = getStubProduct1();
+        Product product = getStubProduct();
         assertThat(product.getTotalPrice(UNITS_PR_PACKAGE * PACKAGE_DISCOUNT_THRESHOLD_VALUE))
                 .isEqualTo(PACKAGE_PRICE * PACKAGE_DISCOUNT_THRESHOLD_VALUE * PACKAGE_DISCOUNT_PERCENTAGE_FACTOR);
     }
@@ -74,7 +74,7 @@ public class ProductTest {
     @Test
     public void getTotalPrice_CountMatchWholePackagesAndIsHigherToDiscountThreshold_PriceShouldBeDiscountedWithCorrectFactor() throws Exception {
         int packageCount = (PACKAGE_DISCOUNT_THRESHOLD_VALUE + 1);
-        Product product = getStubProduct1();
+        Product product = getStubProduct();
         assertThat(product.getTotalPrice(UNITS_PR_PACKAGE * packageCount))
                 .isEqualTo(PACKAGE_PRICE * packageCount * PACKAGE_DISCOUNT_PERCENTAGE_FACTOR);
     }
@@ -82,7 +82,7 @@ public class ProductTest {
     @Test
     public void getTotalPrice_CountLowerThanOnePackage_PriceShouldBeIncreasedWithUnitIncreaseFactor() throws Exception {
         int units = (UNITS_PR_PACKAGE - 1);
-        Product product = getStubProduct1();
+        Product product = getStubProduct();
         assertThat(product.getTotalPrice(units))
                 .isEqualTo(roundUp(units * unitPrice, 2));
     }
@@ -91,7 +91,7 @@ public class ProductTest {
     public void getTotalPrice_CountMatchPackagesAndUnitsAndBellowDiscountThreshold_PriceShouldBeIncreasedWithIncreaseFactorForUnits() throws Exception {
         int units = (UNITS_PR_PACKAGE - 1);
         int packages = (PACKAGE_DISCOUNT_THRESHOLD_VALUE - 1) ;
-        Product product = getStubProduct1();
+        Product product = getStubProduct();
         assertThat(product.getTotalPrice(units + packages * UNITS_PR_PACKAGE))
                 .isEqualTo(roundUp((units * unitPrice) + (packages * PACKAGE_PRICE), 2));
     }
@@ -100,7 +100,7 @@ public class ProductTest {
     public void getTotalPrice_CountMatchPackagesAndUnitsAndAboveDiscountThreshold_PriceShouldBeIncreasedWithIncreaseFactorForUnits() throws Exception {
         int units = (UNITS_PR_PACKAGE - 1);
         int packages = (PACKAGE_DISCOUNT_THRESHOLD_VALUE + 1) ;
-        Product product = getStubProduct1();
+        Product product = getStubProduct();
         assertThat(product.getTotalPrice(units + packages * UNITS_PR_PACKAGE))
                 .isEqualTo(roundUp((units * unitPrice) + (packages * PACKAGE_PRICE * PACKAGE_DISCOUNT_PERCENTAGE_FACTOR), 2));
     }
@@ -109,14 +109,14 @@ public class ProductTest {
     public void getTotalPrice_UsedWithUnitsAndPackages_PriceShouldBeEqualToUsingUnits() throws Exception {
         int units = (UNITS_PR_PACKAGE - 1);
         int packages = (PACKAGE_DISCOUNT_THRESHOLD_VALUE + 1) ;
-        Product product = getStubProduct1();
+        Product product = getStubProduct();
         assertThat(product.getTotalPrice(units, packages))
                 .isEqualTo(product.getTotalPrice(units + packages * UNITS_PR_PACKAGE));
     }
 
     @Test
     public void getTotalPrice_ZeroNumberOfUnits_PriceShouldZero() throws Exception {
-        Product product = getStubProduct1();
+        Product product = getStubProduct();
         assertThat(product.getTotalPrice(0))
                 .isEqualTo(0);
         assertThat(product.getTotalPrice(0,0))
@@ -125,7 +125,7 @@ public class ProductTest {
 
     @Test
     public void getTotalPrice_NegativeNumberOfUnits_ShouldThorwException() throws Exception {
-        Product product = getStubProduct1();
+        Product product = getStubProduct();
         thrown.expect(IllegalArgumentException.class);
         thrown.expectMessage(startsWith("Cannot use negative numbers"));
         product.getTotalPrice(-1);
@@ -133,21 +133,21 @@ public class ProductTest {
 
     @Test
     public void getName_NameSetThroughConstructor_ShouldReturnSameName() throws Exception {
-        Product product = getStubProduct1();
+        Product product = getStubProduct();
         assertThat(product.getName())
                 .isEqualTo(PRODUCT_NAME);
     }
 
     @Test
     public void getUnitsPrPackage_UnitsPrPackageSetThroughConstructor_ShouldReturnSameValue() throws Exception {
-        Product product = getStubProduct1();
+        Product product = getStubProduct();
         assertThat(product.getUnitsPrPackage())
                 .isEqualTo(UNITS_PR_PACKAGE);
     }
 
     @Test
     public void getId_ShouldReturnProductId() throws Exception {
-        Product product = getStubProduct1();
+        Product product = getStubProduct();
         assertThat(product.getId())
                 .isEqualTo(PRODUCT_ID);
     }
@@ -156,10 +156,10 @@ public class ProductTest {
         return new BigDecimal(value).setScale(scale, RoundingMode.HALF_UP).doubleValue();
     }
 
-    private Product getStubProduct1(){
+    private Product getStubProduct(){
         Product product = new Product(PRODUCT_NAME, PACKAGE_PRICE, UNITS_PR_PACKAGE, PACKAGE_DISCOUNT_PERCENTAGE,
                 PACKAGE_DISCOUNT_THRESHOLD_VALUE, UNIT_INCREASE_PERCENTAGE);
-        SetIdHelper.setId(product, 1L);
+        SetIdHelper.setId(product, PRODUCT_ID);
         return product;
     }
 

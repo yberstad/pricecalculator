@@ -24,6 +24,11 @@ class ProductController {
         this.productService = productService;
     }
 
+    @RequestMapping(method = RequestMethod.GET)
+    String getHome() {
+        return "index";
+    }
+
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     ModelAndView getPriceList() {
         ModelAndView modelAndView = new ModelAndView("list");
