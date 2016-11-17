@@ -1,18 +1,23 @@
 package com.driw.web.product;
 
+import com.driw.web.product.viewmodels.InputFormViewModel;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.context.WebApplicationContext;
 
 import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -32,6 +37,9 @@ public class ProductControllerIntegrationTest {
 
     @Autowired
     WebApplicationContext webApplicationContext;
+
+    @Autowired
+    private ObjectMapper mapper;
 
     private MockMvc mockMvc;
 
@@ -65,8 +73,61 @@ public class ProductControllerIntegrationTest {
     }
 
     @Test
-    public void postForm() throws Exception {
+    public void postForm_InvalidNumberOfPackages_ShouldGiveUserValidationError() throws Exception {
+        InputFormViewModel inputForm = new InputFormViewModel();
+        inputForm.setNumberOfPackages(-1);
+        String json = mapper.writeValueAsString(inputForm);
+        this.mockMvc.perform(post("/calculator")
+                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                .param("numberOfPackages", "-1")
+                .accept(MediaType.TEXT_HTML))
+                .andExpect(status().isOk())
+                .andExpect(content().string(containsString("has-error")))
+                .andExpect(content().string(containsString("Must be a number and above zero")));
+    }
 
+    @Test
+    public void postForm_InvalidNumberOfUnits_ShouldGiveUserValidationError() throws Exception {
+        InputFormViewModel inputForm = new InputFormViewModel();
+        inputForm.setNumberOfPackages(-1);
+        String json = mapper.writeValueAsString(inputForm);
+        this.mockMvc.perform(post("/calculator")
+                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                .param("numberOfUnits", "-1")
+                .accept(MediaType.TEXT_HTML))
+                .andExpect(status().isOk())
+                .andExpect(content().string(containsString("has-error")))
+                .andExpect(content().string(containsString("Must be a number and above zero")));
+    }
+
+    @Test
+    public void postForm_NoProductSelected_ShouldGiveUserValidationError() throws Exception {
+        InputFormViewModel inputForm = new InputFormViewModel();
+        inputForm.setNumberOfPackages(-1);
+        String json = mapper.writeValueAsString(inputForm);
+        this.mockMvc.perform(post("/calculator")
+                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                .param("productId", "-1")
+                .accept(MediaType.TEXT_HTML))
+                .andExpect(status().isOk())
+                .andExpect(content().string(containsString("has-error")))
+                .andExpect(content().string(containsString("Must select a product")));
+    }
+
+    @Test
+    public void postForm_ValidSelected_ShouldDisplaySelectedProduct() throws Exception {
+        InputFormViewModel inputForm = new InputFormViewModel();
+        inputForm.setNumberOfPackages(-1);
+        String json = mapper.writeValueAsString(inputForm);
+        this.mockMvc.perform(post("/calculator")
+                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                .param("productId", "1")
+                .param("numberOfPackages", "1")
+                .param("numberOfUnits", "1")
+                .accept(MediaType.TEXT_HTML))
+                .andExpect(status().isOk())
+                .andExpect(content().string(not(containsString("has-error"))))
+                .andExpect(content().string(containsString("Pingvinører")));
     }
 
 }

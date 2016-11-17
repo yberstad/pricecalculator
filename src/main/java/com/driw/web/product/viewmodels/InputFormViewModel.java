@@ -1,11 +1,23 @@
 package com.driw.web.product.viewmodels;
 
-/**
- * Created by oyvindhabberstad on 17/11/2016.
- */
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+
 public class InputFormViewModel {
+
+    @NotNull
+    @Min(1)
     private long productId;
+
+    @NotNull
+    @Min(0)
+    @Max(100)
     private int numberOfPackages;
+
+    @NotNull
+    @Min(0)
+    @Max(100)
     private int numberOfUnits;
 
     public long getProductId() {

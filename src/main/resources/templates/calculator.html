@@ -10,23 +10,26 @@
 <div layout:fragment="content">
     <h1>Price Calculator</h1>
     <form th:method="POST" th:action="${action}" th:object="${inputFormViewModel}">
-        <div class="form-group">
+        <div class="form-group" th:classappend="${#fields.hasErrors('productId')} ? has-error">
             <select class="form-control" th:field="*{productId}" id="dropOperator">
                 <option value="0" th:text="|Select product|"></option>
                 <option th:each="option : ${viewModel.optionList}"
                         th:value="${option.value}"
                         th:text="${option.text}"></option>
             </select>
+            <span th:if="${#fields.hasErrors('productId')}" class="help-block" >Must select a product</span>
         </div>
-        <div class="form-group">
-            <label for="numberOfPackages">Number of packages</label>
-            <input type="input" class="form-control" id="numberOfPackages" name="numberOfPackages"
-                   placeholder="Packages" th:value="*{numberOfPackages}"/>
+        <div class="form-group" th:classappend="${#fields.hasErrors('numberOfPackages')} ? has-error">
+                <label class="control-label" for="numberOfPackages">Number of packages</label>
+                <input type="input" class="form-control" id="numberOfPackages" name="numberOfPackages"
+                       placeholder="Packages" th:value="*{numberOfPackages}"/>
+                <span th:if="${#fields.hasErrors('numberOfPackages')}" class="help-block" >Must be a number and above zero</span>
         </div>
-        <div class="form-group">
-            <label for="numberOfUnits">Number of units</label>
+        <div class="form-group" th:classappend="${#fields.hasErrors('numberOfUnits')} ? has-error">
+            <label class="control-label" for="numberOfUnits">Number of units</label>
             <input type="input" class="form-control" id="numberOfUnits" name="numberOfUnits"
                    placeholder="Units" th:value="*{numberOfUnits}"/>
+            <span th:if="${#fields.hasErrors('numberOfUnits')}" class="help-block" >Must be a number and above zero</span>
         </div>
         <button type="submit" class="btn btn-default">Calculate</button>
     </form>

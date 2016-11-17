@@ -7,11 +7,15 @@ import com.driw.web.product.viewmodels.InputFormViewModel;
 import com.driw.web.product.viewmodels.ProductViewModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.util.*;
+import javax.validation.Valid;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequestMapping(value = "/")
@@ -53,12 +57,16 @@ class ProductController {
     }
 
     @RequestMapping(value = "/calculator", method = RequestMethod.POST)
-    ModelAndView postForm(InputFormViewModel inputForm) {
+    ModelAndView postForm(@Valid InputFormViewModel inputForm, BindingResult bindingResult) {
 
         List<Product> productList = productService.findAll();
 
         CalculatorViewModel viewModel = new CalculatorViewModel(productList);
         ModelAndView modelAndView = new ModelAndView("calculator");
+
+        if (bindingResult.hasErrors()) {
+            return modelAndView.addObject("viewModel", viewModel);
+        }
 
         Optional<Product> selectedProduct = productList
                 .stream()
